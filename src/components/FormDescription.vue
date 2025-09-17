@@ -11,7 +11,7 @@ function updateDescription(event) {
 </script>
 
 <template>
-    <v-icon class="v-icon" :icon="'mdi-file-document'" color="#3182ed"></v-icon>
+    <v-icon class="step__icon" :icon="'mdi-file-document'" color="#3182ed"></v-icon>
     <h2 class="step__title">Adicione detalhes</h2>
 
     <p class="step__description">
@@ -20,16 +20,3 @@ function updateDescription(event) {
 
     <v-text-field @input="updateDescription" label="Descrição" style="width: 100%;" bg-color="#f5f9ff" />
 </template>
-
-<style scoped>
-    .v-icon {
-        background-color: #f5f9ff;
-        border-radius: 50%;
-        height: 50px;
-        width: 50px;
-    }
-
-    .v-icon::before {
-        font-size: 30px;
-    }
-</style>

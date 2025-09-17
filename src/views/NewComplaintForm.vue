@@ -4,6 +4,7 @@ import FormLocation from '../components/FormLocation.vue'
 import { ref, reactive } from 'vue';
 import FormCategory from '@/components/FormCategory.vue';
 import FormDescription from '@/components/FormDescription.vue';
+import FormReview from '@/components/FormReview.vue';
 
 let step = ref(1);
 
@@ -21,11 +22,12 @@ let data = reactive({
         <FormLocation v-if="step == 1" v-model="data.city"></FormLocation>
         <FormCategory v-if="step == 2" v-model="data.category"></FormCategory>
         <FormDescription v-if="step == 3" v-model="data.description"></FormDescription>
-
+        <FormReview v-if="step == 4" v-model:city="data.city" v-model:category="data.category" v-model:description="data.description"></FormReview>
     </section>
     <div class="step__button_box">
         <v-btn v-if="step > 1" prepend-icon="mdi-arrow-left" class="btn--previous" @click="step--">Voltar</v-btn>
-        <v-btn v-if="step < 5" append-icon="mdi-arrow-right" class="btn--forward" @click="step++">Próximo</v-btn>
+        <v-btn v-if="step < 4" append-icon="mdi-arrow-right" class="btn--forward" @click="step++">Próximo</v-btn>
+        <v-btn v-if="step == 4" append-icon="mdi-send" class="btn--forward">Enviar</v-btn>
     </div>
 </template>
 
@@ -44,6 +46,18 @@ let data = reactive({
 
     margin: 20px;
 }
+
+
+.step__icon {
+        background-color: #f5f9ff;
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+    }
+
+    .step_icon::before {
+        font-size: 30px;
+    }
 
 .step__title {
     color: #344256;
