@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./api
+    container_name: denuncias-api
+    ports:
+      - "3000:8080"
+    volumes:
+      - ~/.config/gcloud:/root/.config/gcloud:ro
+      - ./api:/app
+      - /app/node_modules
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
+    command: npm run start:dev
