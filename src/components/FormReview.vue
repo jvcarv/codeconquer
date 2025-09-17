@@ -1,5 +1,25 @@
 <script setup>
+import { collection, addDoc } from 'firebase/firestore'
+import { db } from '../firebase.js'
+
 const props = defineProps(['city', 'category', 'description'])
+
+const complaintsRef = collection(db, 'complaints')
+
+async function submit() {
+  try {
+    await addDoc(complaintsRef, {
+      city: props.city,
+      category: props.category,
+      description: props.description,
+      timestamp: new Date()
+    })
+    alert('Denúncia enviada com sucesso!')
+  } catch (error) {
+    console.error('Erro ao enviar denúncia:', error)
+    alert('Erro ao enviar denúncia. Tente novamente.')
+  }
+}
 </script>
 
 <template>
@@ -31,6 +51,8 @@ const props = defineProps(['city', 'category', 'description'])
         </div>
         <p class="review__value">{{ description }}</p>
     </div>
+
+    <v-btn @click="submit" append-icon="mdi-send" class="btn--submit">Enviar Denúncia</v-btn>
 </template>
 
 <style scoped>
@@ -72,5 +94,18 @@ const props = defineProps(['city', 'category', 'description'])
         font-size: 16px;
         text-align: flex-start;
         font-weight: 500;
+    }
+
+    .btn--submit {
+        background-color: #3182ed;
+        color: #fff !important;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-family: 'Noto Sans', Arial, sans-serif;
+        font-weight: 500 !important;
+        font-size: 14px;
+        text-transform: capitalize;
+        letter-spacing: normal;
+        margin-top: 20px;
     }
 </style>
