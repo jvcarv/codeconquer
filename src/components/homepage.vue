@@ -1,12 +1,35 @@
 <script setup>
 import navbar from './navbar.vue'
 import HeaderHome from './HeaderHome.vue'
+import { ref } from 'vue';
+
+const btnStrings = {
+  true: 'Esconder Denúncias',
+  false: 'Ver Denúncias Existentes'
+}
+
+let complaints = null;
+const showComplaints = ref(false);
+const btnStr = ref(btnStrings[showComplaints ? 'true' : 'false'])
+
+function toggleComplaintsView() {
+  showComplaints.value = !showComplaints.value
+}
 </script>
 
 <template>
   <HeaderHome></HeaderHome>
 
-  <v-btn variant="plain" class="btn--view_existing">Ver denúncias existentes</v-btn>
+  <v-btn v-show="!showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Ver Denúncias Existentes</v-btn>
+  <v-btn v-show="showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Esconder Denúncias</v-btn>
+
+  <div class="complaints__box">
+    <div class="complaints__item" v-for="item of complaints">
+      <span class="complaints__category"></span>
+      <span class="complaints__description"></span>
+      <span class="complaints__city"></span>
+    </div>
+  </div>
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
