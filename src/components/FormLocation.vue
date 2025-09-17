@@ -11,6 +11,7 @@ function updateCity(event) {
 </script>
 
 <template>
+    <v-icon class="step__icon" :icon="'mdi-map-marker'" color="#3182ed"></v-icon>
     <h2 class="step__title">Informar local</h2>
 
     <p class="step__description">

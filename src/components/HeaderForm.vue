@@ -18,7 +18,7 @@ function navigateToHome() {
         </div>
         <div class="column--right">
             <h1 class="header__title">Criar denúncia</h1>
-            <p class="header__description">{{ 'Etapa ' + step + '/5' }}</p>
+            <p class="header__description">{{ 'Etapa ' + step + '/4' }}</p>
         </div>
     </section>
 </template>

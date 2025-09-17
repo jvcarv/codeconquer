@@ -11,6 +11,7 @@ function updateCategory(value) {
 </script>
 
 <template>
+    <v-icon class="step__icon" :icon="'mdi-tag'" color="#3182ed"></v-icon>
     <h2 class="step__title">Escolher categoria</h2>
 
     <p class="step__description">
