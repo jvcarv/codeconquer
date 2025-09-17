@@ -1,29 +1,84 @@
 <script setup>
-import { ref } from 'vue';
-import NotificationsText from './notificationsText.vue';
-import Button from './button.vue';
-
-const resolvedQuantity = ref(5);
-const realizedQuantity = ref(10);
-
+import navbar from './navbar.vue'
+import HeaderHome from './HeaderHome.vue'
 </script>
 
 <template>
-  <v-container class="d-flex flex-column align-center pt-10">
-    <Button text="Nova chamada" color="blue" icon="mdi-plus"/>
+  <HeaderHome></HeaderHome>
 
-    <Button text="Minhas chamadas" color="grey" icon="mdi-archive"/>
-  </v-container>
+  <v-btn variant="plain" class="btn--view_existing">Ver denúncias existentes</v-btn>
 
-  <NotificationsText
-    :realizedQuantity="realizedQuantity"
-    :resolvedQuantity="resolvedQuantity"
-  />
+  <section class="note">
+    <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
 
-  <v-row>
-    <v-col cols="12 d-flex" class="justify-center">
-      <v-btn rounded="xl" size="x-large" color="red" class="pt-2 pb-2 ps-2 pe-2 mt-15">Sair</v-btn>
-    </v-col>
-  </v-row>
+    <p class="note__description">
+      Suas denúncias anônimas nos ajudam a identificar e resolver problemas em nossa comunidade.
+      Cada denúncia é importante e contribui para tornar nossa cidade melhor para todos.
+    </p>
+
+    <!-- <v-btn class="btn--main">Criar nova denuncia</v-btn> -->
+  </section>
 </template>
 
+<style scoped>
+.btn--view_existing {
+  display: flex;
+
+  width: 240px;
+  margin: 32px auto;
+
+  background-color: #458ce9;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 16px;
+
+  font-family: 'Noto Sans', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: capitalize;
+
+  letter-spacing: normal;
+}
+
+.note {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+  border-radius: 10px;
+  border: solid 1px #e5e7eb;
+
+  margin: auto 20px;
+}
+
+.note__title {
+  color: #344256;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.note__description {
+  color: #9aa4b1;
+  font-size: 14px;
+  text-align: center;
+}
+
+button.v-btn.btn--main {
+  background-color: #3182ed;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 16px;
+
+  font-family: 'Noto Sans', Arial, sans-serif;
+  font-weight: 500 !important;
+  font-size: 14px;
+  text-transform: capitalize;
+
+  letter-spacing: normal;
+}
+</style>

@@ -12,4 +12,8 @@ import Navbar from '@/components/navbar.vue'
   </v-app>
 </template>
 
-<style scoped></style>
+<style>
+div#app {
+  padding: 0;
+}
+</style>
