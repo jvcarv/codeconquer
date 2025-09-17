@@ -1,9 +1,8 @@
 <script setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+const props = defineProps(['step'])
 const router = useRouter();
-const steps = ref(1);
 
 function navigateToHome() {
     router.push('/');
@@ -19,7 +18,7 @@ function navigateToHome() {
         </div>
         <div class="column--right">
             <h1 class="header__title">Criar denúncia</h1>
-            <p class="header__description">{{ 'Etapa ' + steps + '/5' }}</p>
+            <p class="header__description">{{ 'Etapa ' + step + '/5' }}</p>
         </div>
     </section>
 </template>
