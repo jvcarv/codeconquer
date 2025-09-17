@@ -4,9 +4,6 @@ import Homepage from '@/components/homepage.vue'
 </script>
 
 <template>
-  <nav>
-    <navbar />
-  </nav>
   <main>
     <Homepage />
   </main>

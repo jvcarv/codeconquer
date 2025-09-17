@@ -9,4 +9,8 @@ import Homepage from '@/components/homepage.vue'
   </v-app>
 </template>
 
-<style scoped></style>
+<style>
+div#app {
+  padding: 0;
+}
+</style>

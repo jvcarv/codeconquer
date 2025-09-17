@@ -1,33 +1,86 @@
 <script setup>
 import navbar from './navbar.vue'
+import HeaderHome from './HeaderHome.vue';
 </script>
 
 <template>
-  <v-btn
-    rounded="lg"
-    size="x-large"
-    color="blue"
-    class="pt-5 pb-5 ps-3 pe-3 mb-5 mt-10"
-    prepend-icon="mdi-plus"
-    block
-    >Nova notificação</v-btn
-  >
+  <HeaderHome></HeaderHome>
 
-  <v-btn
-    rounded="lg"
-    size="x-large"
-    color="grey"
-    class="pt-5 pb-5 ps-3 pe-3 mt-3"
-    prepend-icon="mdi-archive"
-    block
-    >Minhas notificações</v-btn
-  >
+  <v-btn variant="plain" class="btn--view_existing">Ver denúncias existentes</v-btn>
 
-  <p>Já foram feitas 0 notificações</p>
+  <section class="note">
+    <h2 class="note__title">
+      Ajude-nos a melhorar a cidade!
+    </h2>
 
-  <v-row>
-    <v-col cols="12 d-flex" class="justify-center">
-      <v-btn rounded="xl" size="x-large" color="red" class="pt-2 pb-2 ps-2 pe-2 mt-3">Sair</v-btn>
-    </v-col>
-  </v-row>
+    <p class="note__description">
+      Suas denúncias anônimas nos ajudam a identificar e resolver problemas em nossa comunidade. Cada denúncia é
+      importante e contribui para tornar nossa cidade melhor para todos.
+    </p>
+
+    <!-- <v-btn class="btn--main">Criar nova denuncia</v-btn> -->
+  </section>
 </template>
+
+<style scoped>
+.btn--view_existing {
+  display: flex;
+
+  width: 240px;
+  margin: 32px auto;
+
+  background-color: #458ce9;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 16px;
+
+  font-family: 'Noto Sans', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: capitalize;
+
+  letter-spacing: normal;
+}
+
+.note {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+  border-radius: 10px;
+  border: solid 1px #e5e7eb;
+
+  margin: auto 20px;
+}
+
+.note__title {
+  color: #344256;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.note__description {
+  color: #9aa4b1;
+  font-size: 14px;
+  text-align: center;
+}
+
+button.v-btn.btn--main {
+  background-color: #3182ed;
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 16px;
+
+  font-family: 'Noto Sans', Arial, sans-serif;
+  font-weight: 500 !important;
+  font-size: 14px;
+  text-transform: capitalize;
+
+  letter-spacing: normal;
+}
+</style>
