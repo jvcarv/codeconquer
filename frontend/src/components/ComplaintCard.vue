@@ -6,7 +6,7 @@ const props = defineProps(['category', 'description', 'city', 'timestamp'])
     <div class="complaints__item">
         <div class="complaints__top">
             <span class="complaints__category">{{ category }}</span>
-            <span class="complaints__date">{{ new Date(timestamp.toDate ? timestamp.toDate() : timestamp).toLocaleDateString() }}</span>
+            <span class="complaints__date">{{ new Date(timestamp.toDate ? timestamp.toDate() : timestamp).toLocaleDateString('pt-BR') }}</span>
         </div>
         <span class="complaints__description">{{ description }}</span>
         <span class="complaints__city">{{ city }}</span>
