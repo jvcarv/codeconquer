@@ -29,7 +29,7 @@ function toggleComplaintsView() {
 
   <!-- <notificationsText :complaints="complaints" /> -->
 
-  <MapVisualizer v-if="showList" :complaints="complaints" :show-current-location="true" :allow-click-to-add-marker="false"/>
+  <MapVisualizer v-if="showComplaints" :complaints="complaints" :show-current-location="true" :allow-click-to-add-marker="false"/>
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
