@@ -3,25 +3,31 @@ import { ref } from 'vue'
 import { useCollection } from 'vuefire'
 import { collection } from 'firebase/firestore'
 import { db } from '../firebase.js'
-import navbar from './navbar.vue'
+
 import HeaderHome from './HeaderHome.vue'
+import ComplaintCard from './ComplaintCard.vue'
 import notificationsText from './notificationsText.vue'
 
 const complaintsRef = collection(db, 'complaints')
 const complaints = useCollection(complaintsRef)
-const showList = ref(false)
+const showComplaints = ref(false)
 
-function viewExisting() {
-  showList.value = true
+function toggleComplaintsView() {
+  showComplaints.value = !showComplaints.value
 }
 </script>
 
 <template>
   <HeaderHome></HeaderHome>
 
-  <v-btn variant="plain" class="btn--view_existing" @click="viewExisting">Ver denúncias existentes</v-btn>
+  <v-btn v-show="!showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Ver Denúncias Existentes</v-btn>
+  <v-btn v-show="showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Esconder Denúncias</v-btn>
 
-  <notificationsText v-if="showList" :complaints="complaints" />
+  <div class="complaints__box" v-show="showComplaints">
+    <ComplaintCard v-for="item of complaints" v-model:category="item.category" v-model:description="item.description" v-model:city="item.city"></ComplaintCard>
+  </div>
+
+  <notificationsText v-if="showComplaints" :complaints="complaints" />
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
@@ -67,7 +73,7 @@ function viewExisting() {
   border-radius: 10px;
   border: solid 1px #e5e7eb;
 
-  margin: auto 20px;
+  margin: auto 20px 20px;
 }
 
 .note__title {
@@ -95,5 +101,14 @@ button.v-btn.btn--main {
   text-transform: capitalize;
 
   letter-spacing: normal;
+}
+
+.complaints__box {
+  display: flex;
+  padding: 0 20px;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-bottom: 32px;
 }
 </style>
