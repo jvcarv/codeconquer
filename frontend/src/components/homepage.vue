@@ -23,9 +23,6 @@ function toggleComplaintsView() {
 
   <v-btn v-show="!showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Ver Denúncias Existentes</v-btn>
   <v-btn v-show="showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Esconder Denúncias</v-btn>
-
-
-  
   
   <div class="complaints__box" v-show="showComplaints">
     <v-btn-toggle mandatory class="complaints__toggle">
@@ -35,7 +32,7 @@ function toggleComplaintsView() {
     
     <MapVisualizer v-show="complaintsView" :complaints="complaints" :show-current-location="true" :allow-click-to-add-marker="false"/>
 
-    <ComplaintCard v-show="!complaintsView" v-for="item of complaints" v-model:category="item.category" v-model:description="item.description" v-model:city="item.city"></ComplaintCard>
+    <ComplaintCard v-show="!complaintsView" v-for="item of complaints" v-model:category="item.category" v-model:description="item.description" v-model:city="item.city" v-model:timestamp="item.timestamp"></ComplaintCard>
   </div>
 
   <section class="note">
@@ -127,6 +124,7 @@ button.v-btn.btn--main {
 .complaints__toggle .v-btn {
   width: 50%;
   height: 32px !important;
+  letter-spacing: normal;
 
   font-family: 'Noto Sans', Arial, sans-serif;
   color: #344256;
