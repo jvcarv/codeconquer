@@ -6,7 +6,6 @@ import { db } from '../firebase.js'
 
 import HeaderHome from './HeaderHome.vue'
 import ComplaintCard from './ComplaintCard.vue'
-import notificationsText from './notificationsText.vue'
 
 const complaintsRef = collection(db, 'complaints')
 const complaints = useCollection(complaintsRef)
@@ -36,8 +35,6 @@ function toggleComplaintsView() {
       Suas denúncias anônimas nos ajudam a identificar e resolver problemas em nossa comunidade.
       Cada denúncia é importante e contribui para tornar nossa cidade melhor para todos.
     </p>
-
-    <!-- <v-btn class="btn--main">Criar nova denuncia</v-btn> -->
   </section>
 </template>
 
