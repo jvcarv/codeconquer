@@ -1,12 +1,27 @@
 <script setup>
+import { ref } from 'vue'
+import { useCollection } from 'vuefire'
+import { collection } from 'firebase/firestore'
+import { db } from '../firebase.js'
 import navbar from './navbar.vue'
 import HeaderHome from './HeaderHome.vue'
+import notificationsText from './notificationsText.vue'
+
+const complaintsRef = collection(db, 'complaints')
+const complaints = useCollection(complaintsRef)
+const showList = ref(false)
+
+function viewExisting() {
+  showList.value = true
+}
 </script>
 
 <template>
   <HeaderHome></HeaderHome>
 
-  <v-btn variant="plain" class="btn--view_existing">Ver denúncias existentes</v-btn>
+  <v-btn variant="plain" class="btn--view_existing" @click="viewExisting">Ver denúncias existentes</v-btn>
+
+  <notificationsText v-if="showList" :complaints="complaints" />
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
