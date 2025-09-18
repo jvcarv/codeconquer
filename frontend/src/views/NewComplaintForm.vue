@@ -24,7 +24,7 @@ const complaintsRef = collection(db, 'complaints')
 
 async function submit() {
     if (Object.values(data).some(item => item == '')) {
-        alert('Formulário com dados não preenchidos. Não foi possível criar a denúncia.');
+        triggerAlert('Formulário com dados não preenchidos. Não foi possível criar a denúncia.', 'error');
         return;
     }
 
@@ -35,12 +35,45 @@ async function submit() {
             description: data.description,
             timestamp: new Date()
         })
-        alert('Denúncia enviada com sucesso!')
-        router.push('/');
+        triggerAlert('Denúncia enviada com sucesso!', 'success')
     } catch (error) {
         console.error('Erro ao enviar denúncia:', error)
-        alert('Erro ao enviar denúncia. Tente novamente.')
+        triggerAlert('Erro ao enviar denúncia. Tente novamente.', 'error')
     }
+}
+
+const showAlert = ref(false)
+const alertMessage = ref('')
+const alertBackgroundColor = ref('#00FF00')
+const alertIcon = ref('mdi-check-circle')
+const alertColorClass = ref('alert--green');
+
+function triggerAlert(message, type) {
+  alertMessage.value = message
+  console.log(type)
+
+  switch (type) {
+    case 'success':
+      alertBackgroundColor.value = '#dcffd8'
+      alertIcon.value = 'mdi-check-circle'
+      alertColorClass.value = 'alert--green'
+      break
+    case 'error':
+      alertBackgroundColor.value = '#ffd4d2'
+      alertIcon.value = 'mdi-alert-circle'
+      alertColorClass.value = 'alert--red'
+      break
+  }
+
+  showAlert.value = true
+
+  setTimeout(() => {
+    showAlert.value = false
+
+    if (type == 'success') {
+        router.push('/');
+    }
+  }, 3000)
 }
 </script>
 
@@ -59,6 +92,22 @@ async function submit() {
         <v-btn v-if="step < 4" append-icon="mdi-arrow-right" class="btn--forward" @click="step++">Próximo</v-btn>
         <v-btn v-if="step == 4" @click="submit" append-icon="mdi-send" class="btn--forward">Enviar Denúncia</v-btn>
     </div>
+
+    <v-snackbar
+      v-model="showAlert"
+      :color="alertBackgroundColor"
+      location="top center"
+      transition="slide-y-transition"
+      :timeout="3000"
+      elevation="8"
+    >
+      <template #default style="border-radius: 8px">
+        <div :class="alertColorClass">
+            <v-icon class="me-2">{{ alertIcon }}</v-icon>
+            {{ alertMessage }}
+        </div>
+      </template>
+    </v-snackbar>
 </template>
 
 <style>
@@ -139,5 +188,12 @@ async function submit() {
     text-transform: capitalize;
 
     letter-spacing: normal;
+}
+
+.alert--green {
+    color: rgb(0, 95, 0) !important;
+}
+.alert--red {
+    color: rgb(171, 0, 0) !important;
 }
 </style>
