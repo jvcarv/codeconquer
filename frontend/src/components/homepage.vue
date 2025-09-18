@@ -1,15 +1,16 @@
 <script setup>
-import navbar from './navbar.vue'
+import { ref } from 'vue'
+import { useCollection } from 'vuefire'
+import { collection } from 'firebase/firestore'
+import { db } from '../firebase.js'
+
 import HeaderHome from './HeaderHome.vue'
-import { ref } from 'vue';
+import ComplaintCard from './ComplaintCard.vue'
+import notificationsText from './notificationsText.vue'
 
-const btnStrings = {
-  true: 'Esconder Denúncias',
-  false: 'Ver Denúncias Existentes'
-}
-
-let complaints = null;
-const showComplaints = ref(false);
+const complaintsRef = collection(db, 'complaints')
+const complaints = useCollection(complaintsRef)
+const showComplaints = ref(false)
 
 function toggleComplaintsView() {
   showComplaints.value = !showComplaints.value
@@ -23,12 +24,10 @@ function toggleComplaintsView() {
   <v-btn v-show="showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Esconder Denúncias</v-btn>
 
   <div class="complaints__box" v-show="showComplaints">
-    <div class="complaints__item" v-for="item of complaints">
-      <span class="complaints__category">{{ item.category }}</span>
-      <span class="complaints__description">{{ item.description }}</span>
-      <span class="complaints__city">{{ item.city }}</span>
-    </div>
+    <ComplaintCard v-for="item of complaints" v-model:category="item.category" v-model:description="item.description" v-model:city="item.city"></ComplaintCard>
   </div>
+
+  <notificationsText v-if="showComplaints" :complaints="complaints" />
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
@@ -74,7 +73,7 @@ function toggleComplaintsView() {
   border-radius: 10px;
   border: solid 1px #e5e7eb;
 
-  margin: auto 20px;
+  margin: auto 20px 20px;
 }
 
 .note__title {
@@ -111,35 +110,5 @@ button.v-btn.btn--main {
   gap: 8px;
 
   margin-bottom: 32px;
-}
-
-.complaints__item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 16px;
-  border-radius: 12px;
-
-  border: solid 1px #e5e7eb;
-}
-
-.complaints__category {
-  color: #344256;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 20px;
-}
-
-.complaints__description {
-  color: #9aa4b1;
-  font-size: 14px;
-  text-align: left;
-}
-
-.complaints__city {
-  color: #666d75;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: left;
 }
 </style>
