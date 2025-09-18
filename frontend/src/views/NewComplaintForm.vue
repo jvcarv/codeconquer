@@ -15,7 +15,8 @@ let step = ref(1);
 let data = reactive({
     city: '',
     category: '',
-    description: ''
+    description: '',
+    location: null // { lat, lng }
 })
 
 const router = useRouter();
@@ -23,16 +24,18 @@ const router = useRouter();
 const complaintsRef = collection(db, 'complaints')
 
 async function submit() {
-    if (Object.values(data).some(item => item == '')) {
+    if (Object.values(data).some(item => item == '' || item == null)) {
         triggerAlert('Formulário com dados não preenchidos. Não foi possível criar a denúncia.', 'error');
         return;
     }
 
     try {
+        const locationString = data.location ? `${data.location.lat},${data.location.lng}` : '';
         await addDoc(complaintsRef, {
             city: data.city,
             category: data.category,
             description: data.description,
+            localizacao: locationString,
             timestamp: new Date()
         })
         triggerAlert('Denúncia enviada com sucesso!', 'success')
@@ -81,11 +84,11 @@ function triggerAlert(message, type) {
     <HeaderForm v-model:step="step"></HeaderForm>
 
     <section class="step__container">
-        <FormLocation v-if="step == 1" v-model="data.city"></FormLocation>
+        <FormLocation v-if="step == 1" v-model="data.city" v-model:location="data.location"></FormLocation>
         <FormCategory v-if="step == 2" v-model="data.category"></FormCategory>
         <FormDescription v-if="step == 3" v-model="data.description"></FormDescription>
         <FormReview v-if="step == 4" v-model:city="data.city" v-model:category="data.category"
-            v-model:description="data.description"></FormReview>
+            v-model:description="data.description" :location="data.location"></FormReview>
     </section>
     <div class="step__button_box">
         <v-btn v-if="step > 1" prepend-icon="mdi-arrow-left" class="btn--previous" @click="step--">Voltar</v-btn>

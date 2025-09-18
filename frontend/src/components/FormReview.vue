@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['city', 'category', 'description'])
+const props = defineProps(['city', 'category', 'description', 'location'])
 
 </script>
 
@@ -17,6 +17,13 @@ const props = defineProps(['city', 'category', 'description'])
             <span class="review__title">Cidade</span>
         </div>
         <p class="review__value">{{ city }}</p>
+    </div>
+    <div v-if="location" class="review__card">
+        <div class="review__top">
+            <v-icon class="review__icon" :icon="'mdi-crosshairs-gps'"></v-icon>
+            <span class="review__title">Localização</span>
+        </div>
+        <p class="review__value">Lat: {{ location.lat.toFixed(6) }}, Lng: {{ location.lng.toFixed(6) }}</p>
     </div>
     <div class="review__card">
         <div class="review__top">

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
@@ -13,7 +13,10 @@ L.Icon.Default.mergeOptions({
 })
 
 const props = defineProps({
-  complaints: Array,
+  complaints: {
+    type: Array,
+    default: () => []
+  },
   showCurrentLocation: {
     type: Boolean,
     default: false
@@ -21,12 +24,14 @@ const props = defineProps({
   allowClickToAddMarker: {
     type: Boolean,
     default: false
-  }
+  },
+  initialSelectedLocation: Object // { lat, lng }
 })
 
-const center = ref([-27.6305, -52.2364]) // São Paulo coordinates
+const center = ref([-23.5505, -46.6333]) // São Paulo coordinates
 const zoom = ref(10)
 const currentLocation = ref(null)
+const mapRef = ref(null)
 
 // Drag detection variables
 const isDragging = ref(false)
@@ -36,7 +41,7 @@ const DRAG_THRESHOLD = 5 // pixels
 const CLICK_TIME_THRESHOLD = 300 // milliseconds
 
 const filteredComplaints = computed(() => {
-  return props.complaints.filter(complaint => complaint.location)
+  return props.complaints.filter(complaint => complaint.localizacao && complaint.localizacao.includes(','))
 })
 
 const getIcon = (category) => {
@@ -54,6 +59,12 @@ const getIcon = (category) => {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   })
+}
+
+const parseLocation = (localizacao) => {
+  if (!localizacao || !localizacao.includes(',')) return null
+  const [lat, lng] = localizacao.split(',').map(Number)
+  return { lat, lng }
 }
 
 const getCurrentLocation = () => {
@@ -77,12 +88,22 @@ const getCurrentLocation = () => {
 }
 
 onMounted(() => {
-  if (props.showCurrentLocation) {
-    getCurrentLocation()
-  }
+  nextTick(() => {
+    if (mapRef.value && mapRef.value.leafletObject) {
+      mapRef.value.leafletObject.invalidateSize()
+    }
+    if (props.showCurrentLocation) {
+      getCurrentLocation()
+    }
+    if (props.initialSelectedLocation) {
+      selectedLocation.value = props.initialSelectedLocation
+    }
+  })
 })
 
 const selectedLocation = ref(null)
+
+const emit = defineEmits(['location-selected'])
 
 const onMouseDown = (event) => {
   if (!props.allowClickToAddMarker) return
@@ -117,6 +138,7 @@ const onMouseUp = (event) => {
       lat: event.latlng.lat,
       lng: event.latlng.lng
     }
+    emit('location-selected', selectedLocation.value)
   }
 
   // Reset drag state
@@ -134,6 +156,7 @@ const onMapClick = (event) => {
 <template>
   <div class="map-container">
     <l-map
+      ref="mapRef"
       v-model:zoom="zoom"
       :center="center"
       style="height: 400px; width: 100%"
@@ -149,14 +172,15 @@ const onMapClick = (event) => {
       <l-marker
         v-for="complaint in filteredComplaints"
         :key="complaint.id"
-        :lat-lng="[complaint.location.lat, complaint.location.lng]"
+        :lat-lng="[parseLocation(complaint.localizacao).lat, parseLocation(complaint.localizacao).lng]"
         :icon="getIcon(complaint.category)"
       >
         <l-popup>
           <div>
             <strong>{{ complaint.category }}</strong><br>
             {{ complaint.description }}<br>
-            <small>{{ complaint.city }} - {{ new Date(complaint.timestamp.toDate ? complaint.timestamp.toDate() : complaint.timestamp).toLocaleDateString() }}</small>
+            <small>{{ complaint.city }} - Lat: {{ parseLocation(complaint.localizacao)?.lat.toFixed(6) }}, Lng: {{ parseLocation(complaint.localizacao)?.lng.toFixed(6) }}<br>
+            {{ new Date(complaint.timestamp.toDate ? complaint.timestamp.toDate() : complaint.timestamp).toLocaleDateString() }}</small>
           </div>
         </l-popup>
       </l-marker>
@@ -204,7 +228,8 @@ const onMapClick = (event) => {
 
 <style scoped>
 .map-container {
-  margin: 20px 40px;
+  width: 100%;
+  margin: 20px 0;
   border-radius: 10px;
   overflow: hidden;
   border: solid 1px #e5e7eb;
