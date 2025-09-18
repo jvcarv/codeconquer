@@ -1,29 +1,10 @@
 <script setup>
-import { collection, addDoc } from 'firebase/firestore'
-import { db } from '../firebase.js'
-
 const props = defineProps(['city', 'category', 'description'])
 
-const complaintsRef = collection(db, 'complaints')
-
-async function submit() {
-  try {
-    await addDoc(complaintsRef, {
-      city: props.city,
-      category: props.category,
-      description: props.description,
-      timestamp: new Date()
-    })
-    alert('Denúncia enviada com sucesso!')
-  } catch (error) {
-    console.error('Erro ao enviar denúncia:', error)
-    alert('Erro ao enviar denúncia. Tente novamente.')
-  }
-}
 </script>
 
 <template>
-    <v-icon class="step__icon" :icon="'mdi-file-document'" color="#3182ed"></v-icon>
+    <v-icon class="step__icon" :icon="'mdi-file-find'" color="#3182ed"></v-icon>
     <h2 class="step__title">Revise a denúncia</h2>
 
     <p class="step__description">
@@ -51,8 +32,6 @@ async function submit() {
         </div>
         <p class="review__value">{{ description }}</p>
     </div>
-
-    <v-btn @click="submit" append-icon="mdi-send" class="btn--submit">Enviar Denúncia</v-btn>
 </template>
 
 <style scoped>

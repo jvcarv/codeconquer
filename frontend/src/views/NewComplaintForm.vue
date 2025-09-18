@@ -1,7 +1,11 @@
 <script setup>
+import { ref, reactive } from 'vue';
+import { collection, addDoc } from 'firebase/firestore'
+import { db } from '@/firebase';
+import { useRouter } from 'vue-router';
+
 import HeaderForm from '../components/HeaderForm.vue'
 import FormLocation from '../components/FormLocation.vue'
-import { ref, reactive } from 'vue';
 import FormCategory from '@/components/FormCategory.vue';
 import FormDescription from '@/components/FormDescription.vue';
 import FormReview from '@/components/FormReview.vue';
@@ -13,6 +17,31 @@ let data = reactive({
     category: '',
     description: ''
 })
+
+const router = useRouter();
+
+const complaintsRef = collection(db, 'complaints')
+
+async function submit() {
+    if (Object.values(data).some(item => item == '')) {
+        alert('Formulário com dados não preenchidos. Não foi possível criar a denúncia.');
+        return;
+    }
+
+    try {
+        await addDoc(complaintsRef, {
+            city: data.city,
+            category: data.category,
+            description: data.description,
+            timestamp: new Date()
+        })
+        alert('Denúncia enviada com sucesso!')
+        router.push('/');
+    } catch (error) {
+        console.error('Erro ao enviar denúncia:', error)
+        alert('Erro ao enviar denúncia. Tente novamente.')
+    }
+}
 </script>
 
 <template>
@@ -22,11 +51,13 @@ let data = reactive({
         <FormLocation v-if="step == 1" v-model="data.city"></FormLocation>
         <FormCategory v-if="step == 2" v-model="data.category"></FormCategory>
         <FormDescription v-if="step == 3" v-model="data.description"></FormDescription>
-        <FormReview v-if="step == 4" v-model:city="data.city" v-model:category="data.category" v-model:description="data.description"></FormReview>
+        <FormReview v-if="step == 4" v-model:city="data.city" v-model:category="data.category"
+            v-model:description="data.description"></FormReview>
     </section>
     <div class="step__button_box">
         <v-btn v-if="step > 1" prepend-icon="mdi-arrow-left" class="btn--previous" @click="step--">Voltar</v-btn>
         <v-btn v-if="step < 4" append-icon="mdi-arrow-right" class="btn--forward" @click="step++">Próximo</v-btn>
+        <v-btn v-if="step == 4" @click="submit" append-icon="mdi-send" class="btn--forward">Enviar Denúncia</v-btn>
     </div>
 </template>
 
@@ -48,15 +79,15 @@ let data = reactive({
 
 
 .step__icon {
-        background-color: #f5f9ff;
-        border-radius: 50%;
-        height: 50px;
-        width: 50px;
-    }
+    background-color: #f5f9ff;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
 
-    .step_icon::before {
-        font-size: 30px;
-    }
+.step_icon::before {
+    font-size: 30px;
+}
 
 .step__title {
     color: #344256;
