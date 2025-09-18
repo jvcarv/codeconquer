@@ -8,16 +8,46 @@ const complaintsRef = collection(db, 'complaints')
 
 async function submit() {
   try {
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      })
+    })
+
+    const { latitude, longitude } = position.coords
+
     await addDoc(complaintsRef, {
       city: props.city,
       category: props.category,
       description: props.description,
-      timestamp: new Date()
+      timestamp: new Date(),
+      location: {
+        lat: latitude,
+        lng: longitude
+      }
     })
     alert('Denúncia enviada com sucesso!')
   } catch (error) {
     console.error('Erro ao enviar denúncia:', error)
-    alert('Erro ao enviar denúncia. Tente novamente.')
+    if (error.code === error.PERMISSION_DENIED) {
+      alert('Permissão de localização negada. Denúncia enviada sem localização.')
+      try {
+        await addDoc(complaintsRef, {
+          city: props.city,
+          category: props.category,
+          description: props.description,
+          timestamp: new Date()
+        })
+        alert('Denúncia enviada com sucesso!')
+      } catch (innerError) {
+        console.error('Erro ao enviar denúncia sem localização:', innerError)
+        alert('Erro ao enviar denúncia. Tente novamente.')
+      }
+    } else {
+      alert('Erro ao obter localização. Tente novamente.')
+    }
   }
 }
 </script>

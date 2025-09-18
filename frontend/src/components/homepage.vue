@@ -6,13 +6,14 @@ import { db } from '../firebase.js'
 import navbar from './navbar.vue'
 import HeaderHome from './HeaderHome.vue'
 import notificationsText from './notificationsText.vue'
+import MapVisualizer from './MapVisualizer.vue'
 
 const complaintsRef = collection(db, 'complaints')
 const complaints = useCollection(complaintsRef)
 const showList = ref(false)
 
 function viewExisting() {
-  showList.value = true
+  showList.value = !showList.value
 }
 </script>
 
@@ -21,7 +22,9 @@ function viewExisting() {
 
   <v-btn variant="plain" class="btn--view_existing" @click="viewExisting">Ver denúncias existentes</v-btn>
 
-  <notificationsText v-if="showList" :complaints="complaints" />
+  <!-- <notificationsText :complaints="complaints" /> -->
+
+  <MapVisualizer v-if="showList" :complaints="complaints" :show-current-location="true" :allow-click-to-add-marker="false"/>
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
