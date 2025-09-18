@@ -27,7 +27,6 @@ let data = reactive({
     <div class="step__button_box">
         <v-btn v-if="step > 1" prepend-icon="mdi-arrow-left" class="btn--previous" @click="step--">Voltar</v-btn>
         <v-btn v-if="step < 4" append-icon="mdi-arrow-right" class="btn--forward" @click="step++">Próximo</v-btn>
-        <v-btn v-if="step == 4" append-icon="mdi-send" class="btn--forward">Enviar</v-btn>
     </div>
 </template>
 

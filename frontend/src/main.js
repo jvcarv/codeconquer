@@ -20,6 +20,11 @@ const vuetify = createVuetify({
   directives,
 })
 
+// Import VueFire
+import { VueFire } from 'vuefire'
+import { app as firebaseApp } from './firebase'
+
+app.use(VueFire, { firebaseApp })
 app.use(vuetify)
 app.use(createPinia())
 app.use(router)
