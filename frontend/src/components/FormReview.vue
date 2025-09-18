@@ -1,59 +1,10 @@
 <script setup>
-import { collection, addDoc } from 'firebase/firestore'
-import { db } from '../firebase.js'
-
 const props = defineProps(['city', 'category', 'description'])
 
-const complaintsRef = collection(db, 'complaints')
-
-async function submit() {
-  try {
-    const position = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      })
-    })
-
-    const { latitude, longitude } = position.coords
-
-    await addDoc(complaintsRef, {
-      city: props.city,
-      category: props.category,
-      description: props.description,
-      timestamp: new Date(),
-      location: {
-        lat: latitude,
-        lng: longitude
-      }
-    })
-    alert('Denúncia enviada com sucesso!')
-  } catch (error) {
-    console.error('Erro ao enviar denúncia:', error)
-    if (error.code === error.PERMISSION_DENIED) {
-      alert('Permissão de localização negada. Denúncia enviada sem localização.')
-      try {
-        await addDoc(complaintsRef, {
-          city: props.city,
-          category: props.category,
-          description: props.description,
-          timestamp: new Date()
-        })
-        alert('Denúncia enviada com sucesso!')
-      } catch (innerError) {
-        console.error('Erro ao enviar denúncia sem localização:', innerError)
-        alert('Erro ao enviar denúncia. Tente novamente.')
-      }
-    } else {
-      alert('Erro ao obter localização. Tente novamente.')
-    }
-  }
-}
 </script>
 
 <template>
-    <v-icon class="step__icon" :icon="'mdi-file-document'" color="#3182ed"></v-icon>
+    <v-icon class="step__icon" :icon="'mdi-file-find'" color="#3182ed"></v-icon>
     <h2 class="step__title">Revise a denúncia</h2>
 
     <p class="step__description">
@@ -81,8 +32,6 @@ async function submit() {
         </div>
         <p class="review__value">{{ description }}</p>
     </div>
-
-    <v-btn @click="submit" append-icon="mdi-send" class="btn--submit">Enviar Denúncia</v-btn>
 </template>
 
 <style scoped>
