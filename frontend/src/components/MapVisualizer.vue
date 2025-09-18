@@ -28,7 +28,7 @@ const props = defineProps({
   initialSelectedLocation: Object // { lat, lng }
 })
 
-const center = ref([-23.5505, -46.6333]) // São Paulo coordinates
+const center = ref([-27.6305, -52.2364]) // Original coordinates
 const zoom = ref(10)
 const currentLocation = ref(null)
 const mapRef = ref(null)
