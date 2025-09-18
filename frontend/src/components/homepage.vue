@@ -11,6 +11,7 @@ import MapVisualizer from './MapVisualizer.vue'
 const complaintsRef = collection(db, 'complaints')
 const complaints = useCollection(complaintsRef)
 const showComplaints = ref(false)
+const complaintsView = ref(true);
 
 function toggleComplaintsView() {
   showComplaints.value = !showComplaints.value
@@ -23,13 +24,19 @@ function toggleComplaintsView() {
   <v-btn v-show="!showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Ver Denúncias Existentes</v-btn>
   <v-btn v-show="showComplaints" variant="plain" class="btn--view_existing" @click="toggleComplaintsView">Esconder Denúncias</v-btn>
 
+
+  
+  
   <div class="complaints__box" v-show="showComplaints">
-    <ComplaintCard v-for="item of complaints" v-model:category="item.category" v-model:description="item.description" v-model:city="item.city"></ComplaintCard>
+    <v-btn-toggle mandatory class="complaints__toggle">
+      <v-btn :class="complaintsView ? 'v-btn--active' : ''" @click="complaintsView = true">Ver no mapa</v-btn>
+      <v-btn @click="complaintsView = false">Ver lista</v-btn>
+    </v-btn-toggle>
+    
+    <MapVisualizer v-show="complaintsView" :complaints="complaints" :show-current-location="true" :allow-click-to-add-marker="false"/>
+
+    <ComplaintCard v-show="!complaintsView" v-for="item of complaints" v-model:category="item.category" v-model:description="item.description" v-model:city="item.city"></ComplaintCard>
   </div>
-
-  <!-- <notificationsText :complaints="complaints" /> -->
-
-  <MapVisualizer v-if="showComplaints" :complaints="complaints" :show-current-location="true" :allow-click-to-add-marker="false"/>
 
   <section class="note">
     <h2 class="note__title">Ajude-nos a melhorar a cidade!</h2>
@@ -110,5 +117,20 @@ button.v-btn.btn--main {
   gap: 8px;
 
   margin-bottom: 32px;
+}
+
+.complaints__toggle {
+  width: 100%;
+  display: flex;
+}
+
+.complaints__toggle .v-btn {
+  width: 50%;
+  height: 32px !important;
+
+  font-family: 'Noto Sans', Arial, sans-serif;
+  color: #344256;
+  text-transform: capitalize;
+  font-weight: 600;
 }
 </style>

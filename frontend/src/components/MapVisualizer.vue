@@ -204,7 +204,7 @@ const onMapClick = (event) => {
 
 <style scoped>
 .map-container {
-  margin: 20px 40px;
+  /* margin: 20px 40px; */
   border-radius: 10px;
   overflow: hidden;
   border: solid 1px #e5e7eb;
