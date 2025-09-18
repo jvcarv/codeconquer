@@ -1,10 +1,13 @@
 <script setup>
-const props = defineProps(['category', 'description', 'city'])
+const props = defineProps(['category', 'description', 'city', 'timestamp'])
 </script>
 
 <template>
     <div class="complaints__item">
-        <span class="complaints__category">{{ category }}</span>
+        <div class="complaints__top">
+            <span class="complaints__category">{{ category }}</span>
+            <span class="complaints__date">{{ new Date(timestamp.toDate ? timestamp.toDate() : timestamp).toLocaleDateString('pt-BR') }}</span>
+        </div>
         <span class="complaints__description">{{ description }}</span>
         <span class="complaints__city">{{ city }}</span>
     </div>
@@ -39,5 +42,16 @@ const props = defineProps(['category', 'description', 'city'])
     font-size: 14px;
     font-weight: 700;
     text-align: left;
+}
+
+.complaints__top {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.complaints__date {
+    color: #666d75;
+    font-size: 14px;
 }
 </style>
